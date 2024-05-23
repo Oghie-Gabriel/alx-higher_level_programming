@@ -1,113 +1,101 @@
-# SQL - Introduction
+# AirBnB Clone ― The ALX-Holberton BnB
+![Optional Text](hbnb.png)
+## Description of the project
+The ALX-Holberton B&B sums up the implementation of my four months of studies at the ALX-Holberton School - the fullstack software engineering program.
+The goal of the project is to deploy a replica of the [Airbnb Website](https://www.airbnb.com/) using my server. The final version of this project will have:
+- A command interpreter to manipulate data without a visual interface, like a shell (for development and debugging)
+- A website (front-end) with static and dynamic functionalities
+- A comprehensive database to manage the backend functionalities
+- An API that provides a communication interface between the front and backend of the system.
 
-This was my first SQL project At Alx School in which I began to work with SQL and relational databases.This project was mainly about  data definition, data manipulation language, making subqueries, and using functions.
+### General concepts in review
+As you navigate this code base, it is great to note the following concepts, while completing this project.
+- How to create a Python package
+- How to create a command interpreter in Python using the cmd module
+- What is Unit testing and how to implement it in a large project
+- How to serialize and deserialize a Class
+- How to write and read a JSON file
+- How to manage datetime
+- What is an UUID
+- What is *args and how to use it
+- What is **kwargs and how to use it
+- How to handle named arguments in a function
 
-## Usage :dolphin:
+## Files and Directories
+- ```models``` directory will contain all classes used for the entire project. A class, called “model” in a OOP project is the representation of an object/instance.
+- ```tests``` directory will contain all unit tests.
+- ```console.py``` file is the entry point of our command interpreter.
+- ```models/base_model.py``` file is the base class of all our models. It contains common elements:
+    - attributes: ```id```, ```created_at``` and ```updated_at```
+    - methods: ```save()``` and ```to_json()```
+- ```models/engine``` directory will contain all storage classes (using the same prototype). For the moment I will have only one: ```file_storage.py```.
 
-* Scripts [3-list_tables.sql](./3-list_tables.sql) forward take the database to query
-from as a MySQL command line argument.
+The project's implementation will happen in the following phases:
+## Phase One
+The first phase is to manipulate a powerful storage system to give an abstraction between objects and how they are stored and persisted. To achieve this, I will:
+- put in place a parent class (called ```BaseModel```) to take care of the initialization, serialization and deserialization of my future instances
+- create a simple flow of serialization/deserialization: Instance <-> Dictionary <-> JSON string <-> file
+- create all classes used for AirBnB (```User, State, City, Place…```) that inherit from ```BaseModel```
+- create the first abstracted storage engine of the project: File storage.
+- create all unittests to validate all our classes and storage engine
+- Create a data model
+- Manage (create, update, destroy, etc) objects via a console/command interpreter
+- Store and persist objects to files (JSON files)
+S
+## Description of the command interpreter
+| Commands  | Description |
+| ------------- | ------------- |
+| ```quit```  | Quits the console  |
+| ```Ctrl+D```  | Quits the console  |
+| ```help``` or ```help <command>```  | Displays all commands or Displays instructions for a specific command
+| ```create <class>```  | Creates an object of type , saves it to a JSON file, and prints the objects ID
+| ```show <class> <ID>```  | Shows string representation of an object
+| ```destroy <class> <ID>```  | Deletes an objects
+| ```all or all <class>```  | Prints all string representations of all objects or Prints all string representations of all objects of a specific class
+| ```update <class> <id> <attribute name> "<attribute value>"```  | Updates an object with a certain attribute (new or existing)
+| ```<class>.all()```  | Same as all ```<class>```
+| ```<class>.count()```  | Retrieves the number of objects of a certain class
+| ```<class>.show(<ID>)```  | Same as show ```<class> <ID>```
+| ```<class>.destroy(<ID>)```  | Same as destroy ```<class> <ID>```
+| ```<class>.update(<ID>, <attribute name>, <attribute value>```  | Same as update ```<class> <ID> <attribute name> <attribute value>```
+| ```<class>.update(<ID>, <dictionary representation>)```  | Updates an objects based on a dictionary representation of attribute names and values
 
+## General Execution
+Your shell should work like this in interactive mode:
 ```
-$ cat 3-list_tables.sql | mysql -h localhost -u root -p mysql
+$ ./console.py
+(hbnb) help
+
+Documented commands (type help <topic>):
+========================================
+EOF  help  quit
+(hbnb) 
+(hbnb) 
+(hbnb) quit
+$
+But also in non-interactive mode: (like the Shell project in C)
+
+$ echo "help" | ./console.py
+(hbnb)
+
+Documented commands (type help <topic>):
+========================================
+EOF  help  quit
+(hbnb) 
+$
+$ cat test_help
+help
+$
+$ cat test_help | ./console.py
+(hbnb)
+
+Documented commands (type help <topic>):
+========================================
+EOF  help  quit
+(hbnb)
+$
 ```
-
-* Tasks 101-103 query from the database [temperatures.sql](./temperatures.sql).
-
-## Tasks :page_with_curl:
-
-* **0. List databases**
-  * [0-list_databases.sql](./0-list_databases.sql): MySQL script that lists all databases.
-
-* **1. Create a database**
-  * [1-create_database.sql](./1-create_database.sql): MySQL script that creates the database
-  `hbtn_0c_0`.
-
-* **2. Delete a database**
-  * [2-remove_databases.sql](./2-remove_databases.sql): MySQL script that deletes the database
-  `hbtn_0c_0`.
-
-* **3. List tables**
-  * [3-list_tables.sql](./3-list_tables.sql): MySQL script that lists all tables.
-
-* **4. First table**
-  * [4-first_table.sql](./4-first_table.sql): MySQL script that creates a table `first_table`.
-  * Description:
-    * `id`: INT
-    * `name`: VARCHAR(256)
-
-* **5. Full description**
-  * [5-full_table.sql](./5-full_table.sql): MySQL script that prints the full description of the
-  table `first_table`.
-
-* **6. List all in table**
-  * [6-list_values.sql](./6-list_values.sql): MySQL script that lists all rows of the table
-  `first_table`.
-
-* **7. First add**
-  * [7-insert_value.sql](./7-insert_value.sql): MySQL script that inserts a new row in the table
-  `first_table`.
-  * Description:
-    * `id` = `89`
-    * `name` = `Best School`
-
-* **8. Count 89**
-  * [8-count_89.sql](./8-count_89.sql): MySQL script that displays the number records with `id =
-  89` in the table `first_table`.
-
-* **9. Full creation**
-  * [9-full_creation.sql](./9-full_creation.sql): MySQL script that creates and fills a table
-  `second_table`.
-  * Description:
-    * `id`: INT
-    * `name`: VARCHAR(256)
-    * `score`: INT
-  * Records:
-    * `id` = 1, `name` = "John", `score` = 10
-    * `id` = 2, `name` = "Alex", `score` = 3
-    * `id` = 3, `name` = "Bob", `score` = 14
-    * `id` = 4, `name` = "George", `score` = 8
-
-* **10. List by best**
-  * [10-top_score.sql](./10-top_score.sql): MySQL script that lists the `score` and `name` of all
-  records of the table `second_table` in order of descending `score`.
-
-* **11. Select the best**
-  * [11-best_score.sql](./11-best_score.sql): MySQL script that lists the `score` and `name` of all
-  records with a `score >= 10` in the table `second_table` in order of descending score.
-
-* **12. Cheating is bad**
-  * [12-no_cheating.sql](./12-no_cheating.sql): MySQL script that updates the score of Bob to 10
-  the table `second_table`.
-
-* **13. Score too low**
-  * [13-change_class.sql](./13-change_class.sql): MySQL script that removes all records with a
-  `score <= 5` in the table `second_table`.
-
-* **14. Average**
-  * [14-average.sql](./14-average.sql): MySQL script that computes the average `score` of all
-  records in the table `second_table`.
-
-* **15. Number by score**
-  * [15-groups.sql](./15-groups.sql): MySQL script that lists the `score` and number of records
-  with the same score in the table `second_table` in order of descending count.
-
-* **16. Say my name**
-  * [16-no_link.sql](./16-no_link.sql): MySQL script that lists the `score` and `name` of all
-  records in the table `second_table` in order of descending `score`.
-  * Does not display rows without a `name` value.
-
-* **17. Go to UTF8**
-  * [100-move_to_utf8.sql](./100-move_to_utf8.sql): MySQL script that converts the `hbtn_0c_0`
-  database to UTF8.
-
-* **18. Temperatures #0**
-  * [101-avg_temperatures.sql](./101-avg_temperatures.sql): MySQL script that displays the average
-  temperature (Fahrenheit) by city in descending order.
-
-* **19. Temperatures #1**
-  * [102-top_city.sql](./102-top_city.sql): MySQL script that displays the three cities with the
-  highest average temperature from July to August in descending order.
-
-* **20. Temperature #2**
-  * [103-max_state.sql](./103-max_state.sql): MySQL script that displays the max temperature of each
-  state in order of state name.
+## Final Product
+![alt](https://s3.amazonaws.com/alx-intranet.hbtn.io/uploads/medias/2020/9/fe2e3e7701dec72ce612472dab9bb55fe0e9f6d4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOU65GPZGY3%2F20210226%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210226T091352Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=8ad0ced94d77d100be587f30d4af3734acf12d2b05b803b084cd11ce51bf68f4)
+## Data Diagram
+![alt](https://s3.amazonaws.com/alx-intranet.hbtn.io/uploads/medias/2020/9/99e1a8f2be8c09d5ce5ac321e8cf39f0917f8db5.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOU65GPZGY3%2F20210226%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210226T091352Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=a4013a9239416a982d703d1ac725e63a9b35593900d197534d087b71f813441c)
