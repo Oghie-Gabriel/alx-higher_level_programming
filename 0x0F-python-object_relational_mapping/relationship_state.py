@@ -1,24 +1,20 @@
 #!/usr/bin/python3
-"""Model state module"""
-import sys
-from sqlalchemy import Integer, String, Column, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy import (create_engine)
+"""
+Contains State class and Base, an instance of declarative_base()
+"""
+from sqlalchemy import Column, Integer, String, MetaData
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
-Base = declarative_base()
+mymetadata = MetaData()
+Base = declarative_base(metadata=mymetadata)
 
 
 class State(Base):
-    """Class to model the states table in the database"""
-    __tablename__ = "states"
-    id = Column(Integer, primary_key=True,
-                autoincrement=True, nullable=False)
+    """
+    Class with id and name attributes of each state
+    """
+    __tablename__ = 'states'
+    id = Column(Integer, unique=True, nullable=False, primary_key=True)
     name = Column(String(128), nullable=False)
-    cities = relationship("City")
-
-
-if __name__ == "__main__":
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
-        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
-
-    Base.metadata.create_all(engine)
+    cities = relationship("City", backref="states")

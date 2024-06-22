@@ -1,28 +1,32 @@
 #!/usr/bin/python3
-"""State Selecting module"""
-# ./4-cities_by_state.py michael aka hbtn_0e_0_usa
-if __name__ == "__main__":
-    import MySQLdb
-    from sys import argv as args
+"""Lists all cities from the database hbtn_0e_4_usa"""
 
-    user = args[1]
-    password = args[2]
-    db = args[3]
+if __name__ == '__main__':
+    from sys import argv
+    import MySQLdb as mysql
 
-    conn = MySQLdb.connect(host="localhost", port=3306, user=user,
-                           passwd=password, db=db, charset="utf8")
-    cur = conn.cursor()
+    if (len(argv) != 4):
+        print('Use: username, password, database name')
+        exit(1)
 
-    query = """
-        SELECT cities.id, cities.name, states.name
-        FROM cities
-        JOIN states ON cities.state_id = states.id
-        ORDER BY cities.id ASC
-        """
-    cur.execute(query)
-    query_rows = cur.fetchall()
-    for row in query_rows:
-        if row:
-            print(row)
-    cur.close()
-    conn.close()
+    try:
+        db = mysql.connect(host='localhost', port=3306, user=argv[1],
+                           passwd=argv[2], db=argv[3])
+    except Exception:
+        print('Failed to connect to the database')
+        exit(0)
+
+    cursor = db.cursor()
+
+    cursor.execute("""SELECT c.id, c.name, s.name FROM cities as c
+                      INNER JOIN states as s
+                      ON c.state_id = s.id
+                      ORDER BY c.id ASC;""")
+
+    result_query = cursor.fetchall()
+
+    for row in result_query:
+        print(row)
+
+    cursor.close()
+    db.close()

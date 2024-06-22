@@ -1,24 +1,41 @@
 #!/usr/bin/python3
-"""State Selecting module"""
-# ./3-my_safe_filter_states.py michael aka hbtn_0e_0_usa 'Arizona'
-if __name__ == "__main__":
-    import MySQLdb
-    from sys import argv as args
+"""
+Displays all values in the states table of
+hbtn_0e_0_usa where name matches the argument.
+(Safe from SQL Injection)
+"""
 
-    user = args[1]
-    password = args[2]
-    db = args[3]
-    name = args[4]
+if __name__ == '__main__':
+    from sys import argv
+    import MySQLdb as mysql
+    import re
 
-    conn = MySQLdb.connect(host="localhost", port=3306, user=user,
-                           passwd=password, db=db, charset="utf8")
-    cur = conn.cursor()
+    if (len(argv) != 5):
+        print('Use: username, password, database name, state name')
+        exit(1)
 
-    query = "SELECT * FROM states WHERE BINARY name = %s ORDER BY id ASC"
-    cur.execute(query, (name,))
-    query_rows = cur.fetchall()
-    for row in query_rows:
-        if row:
-            print(row)
-    cur.close()
-    conn.close()
+    searched = ' '.join(argv[4].split())
+
+    if (re.search('^[a-zA-Z ]+$', searched) is None):
+        print('Enter a valid name state (example: Arizona)')
+        exit(1)
+
+    try:
+        db = mysql.connect(host='localhost', port=3306, user=argv[1],
+                           passwd=argv[2], db=argv[3])
+    except Exception:
+        print('Failed to connect to the database')
+        exit(0)
+
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM states \
+                    WHERE name = '{:s}' ORDER BY id ASC;".format(searched))
+
+    result_query = cursor.fetchall()
+
+    for row in result_query:
+        print(row)
+
+    cursor.close()
+    db.close()

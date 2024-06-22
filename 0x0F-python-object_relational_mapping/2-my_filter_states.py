@@ -1,24 +1,31 @@
 #!/usr/bin/python3
-"""State Selecting module"""
-# ./2-my_filter_states.py michael aka hbtn_0e_0_usa 'Arizona'
-if __name__ == "__main__":
-    import MySQLdb
-    from sys import argv as args
+"""
+Displays all values in the states table of
+hbtn_0e_0_usa where name matches the argument.
+"""
 
-    user = args[1]
-    password = args[2]
-    db = args[3]
-    name = args[4]
+if __name__ == '__main__':
+    from sys import argv
+    import MySQLdb as mysql
 
-    conn = MySQLdb.connect(host="localhost", port=3306, user=user,
-                           passwd=password, db=db, charset="utf8")
-    cur = conn.cursor()
+    try:
+        db = mysql.connect(host='localhost', port=3306, user=argv[1],
+                           passwd=argv[2], db=argv[3])
+    except Exception:
+        print('Failed to connect to the database')
+        exit(0)
 
-    query = "SELECT * FROM states WHERE BINARY name = '{}' ORDER BY id ASC"
-    cur.execute(query.format(name))
-    query_rows = cur.fetchall()
-    for row in query_rows:
-        if row:
-            print(row)
-    cur.close()
-    conn.close()
+    searched = argv[4]
+
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM states WHERE name = BINARY '{:s}' \
+                    ORDER BY id ASC;".format(searched))
+
+    result_query = cursor.fetchall()
+
+    for row in result_query:
+        print(row)
+
+    cursor.close()
+    db.close()
